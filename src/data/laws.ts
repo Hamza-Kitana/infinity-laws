@@ -20,13 +20,22 @@ export type PenaltySection = {
   directPoliceUnitsRules: { label: string; value: string }[];
   warningRemoval: { title: string; duration: string; description: string };
 };
+export type SafeZone = {
+  id: string;
+  icon: string;
+  label: string;
+  category: string;
+  note: string;
+  tags: string[];
+  featured?: boolean;
+};
 export type SafeZoneSection = {
   kind: 'safezones';
   id: string;
   label: string;
   short: string;
   subtitle: string;
-  safeZones: { icon: string; label: string }[];
+  safeZones: SafeZone[];
 };
 export type Section = RuleSection | PenaltySection | SafeZoneSection;
 
@@ -804,60 +813,118 @@ export const sections: Section[] = [
     subtitle: 'أماكن محظور فيها العنف والجرائم. للشرطة حق الدخول والتعامل وفق القوانين المعتمدة.',
     safeZones: [
   {
+    "id": "sz-police",
     "icon": "🏢",
-    "label": "مراكز الشرطة"
+    "label": "مراكز الشرطة",
+    "category": "حكومي",
+    "note": "مقر رسمي — يحق للشرطة الدخول والتعامل وفق الأنظمة.",
+    "tags": ["لا خطف", "لا إطلاق نار", "دخول الشرطة مسموح"]
   },
   {
+    "id": "sz-hospital",
     "icon": "🏥",
-    "label": "المستشفيات"
+    "label": "المستشفيات",
+    "category": "طبي",
+    "note": "منطقة علاج — ممنوع إطلاق النار بوجود مسعف.",
+    "tags": ["لا قتال", "لا خطف", "احترام المرضى"]
   },
   {
+    "id": "sz-apartments",
     "icon": "🏠",
-    "label": "الشقق العامة"
+    "label": "الشقق العامة",
+    "category": "سكن",
+    "note": "مسكن عام — ممنوع أي سيناريو إجرامي داخل الشقق.",
+    "tags": ["لا خطف", "لا سلاح", "خصوصية السكن"]
   },
   {
+    "id": "sz-park",
     "icon": "🌳",
-    "label": "الحديقة العامة والكراج المجاور"
+    "label": "الحديقة العامة",
+    "category": "طبيعة",
+    "note": "تعميم رسمي — ممنوع الإجرام والترصد والهروب إليها أثناء المطاردة.",
+    "tags": ["لا إجرام", "لا ترصد", "ممنوع الهروب"],
+    "featured": true
   },
   {
+    "id": "sz-public-garages",
     "icon": "🅿️",
-    "label": "المنطقة العامة والكراجات العامة بالكامل"
+    "label": "المنطقة العامة والكراجات",
+    "category": "مواقف",
+    "note": "آمنة للجميع — تشمل كل الكراجات العامة للحكومي والعصابات والمواطنين.",
+    "tags": ["للجميع", "كراجات كاملة", "لا سيناريو"],
+    "featured": true
   },
   {
+    "id": "sz-restaurants",
     "icon": "🍽️",
-    "label": "داخل المطاعم و الكافيهات"
+    "label": "المطاعم والكافيهات",
+    "category": "تجاري",
+    "note": "أماكن عامة — ممنوع العنف أو الاستفزاز داخل المطاعم.",
+    "tags": ["لا خطف", "لا سلاح", "احترام الزبائن"]
   },
   {
+    "id": "sz-workshops",
     "icon": "🔧",
-    "label": "ورشات تصليح المركبات"
+    "label": "ورشات تصليح المركبات",
+    "category": "خدمات",
+    "note": "ورش رسمية — ممنوع بدء أي سيناريو إجرامي داخل الورشة.",
+    "tags": ["لا خطف", "لا سرقة", "احترام العمال"]
   },
   {
+    "id": "sz-jail",
     "icon": "🔒",
-    "label": "السجن"
+    "label": "السجن",
+    "category": "حكومي",
+    "note": "منشأة أمنية — محمية بالكامل ولا يُسمح بأي اشتباك.",
+    "tags": ["لا هروب", "لا إطلاق نار", "حماية كاملة"]
   },
   {
+    "id": "sz-court",
     "icon": "⚖️",
-    "label": "المحكمة"
+    "label": "المحكمة",
+    "category": "قانوني",
+    "note": "مقر قضائي — ممنوع أي تصرف إجرامي أو تهديد.",
+    "tags": ["لا خطف", "لا سلاح", "احترام القضاء"]
   },
   {
+    "id": "sz-impound",
     "icon": "🚗",
-    "label": "حجز المركبات"
+    "label": "حجز المركبات",
+    "category": "مواقف",
+    "note": "ساحة حجز — ممنوع السرقة أو الاشتباك داخل الحجز.",
+    "tags": ["لا سرقة", "لا خطف", "مركبات محمية"]
   },
   {
+    "id": "sz-dealerships",
     "icon": "🚘",
-    "label": "معارض السيارات"
+    "label": "معارض السيارات",
+    "category": "تجاري",
+    "note": "معارض رسمية — ممنوع أي سيناريو إجرامي داخل المعرض.",
+    "tags": ["لا خطف", "لا سرقة", "احترام التجار"]
   },
   {
+    "id": "sz-rental",
     "icon": "🔑",
-    "label": "تأجير السيارات"
+    "label": "تأجير السيارات",
+    "category": "خدمات",
+    "note": "مكاتب تأجير — ممنوع الخطف أو إطلاق النار داخل المكتب.",
+    "tags": ["لا خطف", "لا سلاح", "تعامل رسمي"]
   },
   {
+    "id": "sz-casino",
     "icon": "🎰",
-    "label": "كازينو"
+    "label": "كازينو",
+    "category": "ترفيه",
+    "note": "منطقة ترفيهية — ممنوع العنف أو بدء سيناريو إجرامي.",
+    "tags": ["لا خطف", "لا إطلاق نار", "احترام اللاعبين"]
   },
   {
+    "id": "sz-barber",
     "icon": "💈",
-    "label": "أماكن الوشوم والحلاقة وتغيير الملابس (عدا الأرصفة)"
+    "label": "الوشوم والحلاقة وتغيير الملابس",
+    "category": "خدمات",
+    "note": "محلات خدمة — آمنة عدا الأرصفة الخارجية.",
+    "tags": ["داخل المحل فقط", "لا خطف", "لا سلاح"]
   }
 ],
   },

@@ -8,7 +8,6 @@ import {
   Gavel,
   Hospital,
   KeyRound,
-  Landmark,
   Lock,
   MapPinned,
   Scale,
@@ -24,11 +23,12 @@ import {
   TriangleAlert,
   Users,
   UtensilsCrossed,
+  Warehouse,
   Wrench,
   X,
 } from "lucide-react";
 import logo from "@/assets/infinity-logo.png";
-import { sections, type PenaltySection, type RuleSection, type SafeZoneSection } from "@/data/laws";
+import { sections, type PenaltySection, type RuleSection, type SafeZone, type SafeZoneSection } from "@/data/laws";
 
 function pad(n: number) {
   return n.toString().padStart(2, "0");
@@ -115,22 +115,121 @@ function RulesGrid({ section, query }: { section: RuleSection; query: string }) 
   );
 }
 
-function safeZoneVisual(label: string) {
-  if (label.includes("شرطة")) return Shield;
-  if (label.includes("مستشف")) return Hospital;
-  if (label.includes("شقق")) return Building2;
-  if (label.includes("حديقة")) return Trees;
-  if (label.includes("منطقة عامة") || label.includes("كراجات")) return Landmark;
-  if (label.includes("مطاعم") || label.includes("كافيه")) return UtensilsCrossed;
-  if (label.includes("ورش")) return Wrench;
-  if (label.includes("سجن")) return Lock;
-  if (label.includes("محكمة")) return Scale;
-  if (label.includes("حجز")) return CircleParking;
-  if (label.includes("معارض")) return CarFront;
-  if (label.includes("تأجير")) return KeyRound;
-  if (label.includes("كازينو")) return Dices;
-  if (label.includes("وشوم") || label.includes("حلاقة")) return Scissors;
-  return MapPinned;
+const SAFE_ZONE_STYLE: Record<
+  string,
+  { icon: typeof Shield; tile: string; badge: string; ring: string; iconColor: string; layout?: "garage" }
+> = {
+  "sz-police": {
+    icon: Shield,
+    tile: "border-primary/35 bg-primary/8",
+    badge: "border-primary/40 bg-primary/15 text-primary",
+    ring: "border-primary/45",
+    iconColor: "text-primary",
+  },
+  "sz-hospital": {
+    icon: Hospital,
+    tile: "border-red-400/30 bg-red-500/8",
+    badge: "border-red-400/35 bg-red-500/15 text-red-300",
+    ring: "border-red-400/40",
+    iconColor: "text-red-300",
+  },
+  "sz-apartments": {
+    icon: Building2,
+    tile: "border-accent/30 bg-accent/8",
+    badge: "border-accent/35 bg-accent/15 text-accent",
+    ring: "border-accent/40",
+    iconColor: "text-accent",
+  },
+  "sz-park": {
+    icon: Trees,
+    tile: "safe-tile border-safe/45 bg-safe/10 sm:col-span-2",
+    badge: "border-safe/45 bg-safe/20 text-safe",
+    ring: "border-safe/55",
+    iconColor: "text-safe",
+  },
+  "sz-public-garages": {
+    icon: Warehouse,
+    tile: "safe-tile-garage sm:col-span-2",
+    badge: "border-amber-300/40 bg-amber-400/15 text-amber-200",
+    ring: "border-amber-300/50",
+    iconColor: "text-amber-200",
+    layout: "garage",
+  },
+  "sz-restaurants": {
+    icon: UtensilsCrossed,
+    tile: "border-orange-400/28 bg-orange-500/8",
+    badge: "border-orange-400/35 bg-orange-500/15 text-orange-200",
+    ring: "border-orange-400/40",
+    iconColor: "text-orange-200",
+  },
+  "sz-workshops": {
+    icon: Wrench,
+    tile: "border-muted-foreground/25 bg-secondary/30",
+    badge: "border-border bg-secondary/50 text-muted-foreground",
+    ring: "border-border",
+    iconColor: "text-muted-foreground",
+  },
+  "sz-jail": {
+    icon: Lock,
+    tile: "border-zinc-400/25 bg-zinc-500/8",
+    badge: "border-zinc-400/35 bg-zinc-500/15 text-zinc-300",
+    ring: "border-zinc-400/40",
+    iconColor: "text-zinc-300",
+  },
+  "sz-court": {
+    icon: Scale,
+    tile: "border-violet-400/28 bg-violet-500/8",
+    badge: "border-violet-400/35 bg-violet-500/15 text-violet-200",
+    ring: "border-violet-400/40",
+    iconColor: "text-violet-200",
+  },
+  "sz-impound": {
+    icon: CircleParking,
+    tile: "border-sky-400/28 bg-sky-500/8",
+    badge: "border-sky-400/35 bg-sky-500/15 text-sky-200",
+    ring: "border-sky-400/40",
+    iconColor: "text-sky-200",
+  },
+  "sz-dealerships": {
+    icon: CarFront,
+    tile: "border-cyan-400/25 bg-cyan-500/8",
+    badge: "border-cyan-400/35 bg-cyan-500/15 text-cyan-200",
+    ring: "border-cyan-400/40",
+    iconColor: "text-cyan-200",
+  },
+  "sz-rental": {
+    icon: KeyRound,
+    tile: "border-emerald-400/25 bg-emerald-500/8",
+    badge: "border-emerald-400/35 bg-emerald-500/15 text-emerald-200",
+    ring: "border-emerald-400/40",
+    iconColor: "text-emerald-200",
+  },
+  "sz-casino": {
+    icon: Dices,
+    tile: "border-fuchsia-400/28 bg-fuchsia-500/8",
+    badge: "border-fuchsia-400/35 bg-fuchsia-500/15 text-fuchsia-200",
+    ring: "border-fuchsia-400/40",
+    iconColor: "text-fuchsia-200",
+  },
+  "sz-barber": {
+    icon: Scissors,
+    tile: "border-pink-400/25 bg-pink-500/8",
+    badge: "border-pink-400/35 bg-pink-500/15 text-pink-200",
+    ring: "border-pink-400/40",
+    iconColor: "text-pink-200",
+  },
+};
+
+function safeZoneStyle(zone: SafeZone) {
+  return (
+    SAFE_ZONE_STYLE[zone.id] ?? {
+      icon: MapPinned,
+      tile: "border-safe/25 bg-safe/6",
+      badge: "border-safe/35 bg-safe/15 text-safe",
+      ring: "border-safe/40",
+      iconColor: "text-safe",
+    }
+  );
 }
 
 function PenaltiesPanel({ section }: { section: PenaltySection }) {
@@ -326,8 +425,16 @@ function PenaltiesPanel({ section }: { section: PenaltySection }) {
 }
 
 function SafeZonesPanel({ section, query }: { section: SafeZoneSection; query: string }) {
-  const q = query.trim();
-  const zones = q ? section.safeZones.filter((z) => z.label.includes(q)) : section.safeZones;
+  const q = query.trim().toLowerCase();
+  const zones = q
+    ? section.safeZones.filter(
+        (z) =>
+          z.label.includes(q) ||
+          z.note.includes(q) ||
+          z.category.includes(q) ||
+          z.tags.some((t) => t.includes(q)),
+      )
+    : section.safeZones;
 
   if (zones.length === 0) {
     return (
@@ -356,51 +463,84 @@ function SafeZonesPanel({ section, query }: { section: SafeZoneSection; query: s
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {zones.map((z, i) => {
-          const Icon = safeZoneVisual(z.label);
+          const style = safeZoneStyle(z);
+          const Icon = style.icon;
+          const zoneNo = section.safeZones.findIndex((sz) => sz.id === z.id) + 1;
+          const isGarage = style.layout === "garage";
+
           return (
             <article
-              key={z.label}
-              className="safe-tile anim-rise min-h-[200px] rounded-[1.4rem] p-4 md:min-h-[220px] md:rounded-[1.6rem] md:p-5"
+              key={z.id}
+              className={`anim-rise min-h-[220px] overflow-hidden rounded-[1.4rem] border p-4 md:min-h-[240px] md:rounded-[1.6rem] md:p-5 ${style.tile}`}
               style={{ animationDelay: `${i * 35}ms` }}
             >
-              <div className="relative flex h-full flex-col">
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-[11px] font-black tracking-[0.22em] text-safe/80">
-                    SZ-{pad(i + 1)}
+              <div className={`relative flex h-full ${isGarage ? "flex-col sm:flex-row sm:items-center sm:gap-5" : "flex-col"}`}>
+                <div className={`flex items-center justify-between gap-2 ${isGarage ? "sm:absolute sm:inset-x-0 sm:top-0" : ""}`}>
+                  <span className={`rounded-full border px-2 py-0.5 text-[9px] font-black tracking-[0.18em] ${style.badge}`}>
+                    {z.category}
                   </span>
-                  <span className="rounded-full border border-safe/35 bg-safe/15 px-2.5 py-0.5 text-[9px] font-black tracking-[0.22em] text-safe">
-                    آمن
+                  <span className="font-display text-[10px] font-black tracking-[0.18em] text-muted-foreground">
+                    SZ-{pad(zoneNo)}
                   </span>
                 </div>
 
-                <div className="relative mx-auto mt-5 mb-4">
-                  <span className="anim-pulse-ring absolute inset-[-10px] rounded-full border border-safe/50" />
+                <div
+                  className={`relative shrink-0 ${
+                    isGarage
+                      ? "mx-auto mt-4 mb-3 sm:mx-0 sm:mt-8 sm:mb-0"
+                      : "mx-auto mt-4 mb-3 md:mt-5 md:mb-4"
+                  }`}
+                >
+                  {z.featured && !isGarage ? (
+                    <span className="anim-pulse-ring absolute inset-[-10px] rounded-2xl border border-safe/50 opacity-50" />
+                  ) : null}
                   <span
-                    className="anim-pulse-ring absolute inset-[-10px] rounded-full border border-safe/30"
-                    style={{ animationDelay: "1.1s" }}
-                  />
-                  <span className="relative flex size-16 items-center justify-center rounded-full border border-safe/40 bg-black/30 text-safe shadow-[0_0_28px_oklch(0.78_0.14_175/0.35)]">
-                    <Icon className="size-7" />
+                    className={`relative flex items-center justify-center border bg-black/30 ${
+                      isGarage
+                        ? "size-16 rounded-xl sm:size-[4.5rem]"
+                        : z.featured
+                          ? "size-14 rounded-2xl md:size-16"
+                          : "size-14 rounded-2xl md:size-16 md:rounded-full"
+                    } ${style.ring}`}
+                  >
+                    <Icon className={`size-6 md:size-7 ${style.iconColor}`} />
                   </span>
                 </div>
 
-                <h3 className="font-display text-center text-[15px] leading-7 font-bold">
-                  {z.label}
-                </h3>
-                <p className="mt-1 text-center text-[10px] tracking-[0.28em] text-safe/80">
-                  محمية دستورية
-                </p>
+                <div className={`min-w-0 flex-1 ${isGarage ? "sm:pt-8" : ""}`}>
+                  <h3
+                    className={`font-display text-[14px] leading-7 font-bold md:text-[15px] ${
+                      isGarage ? "text-center sm:text-start" : "text-center"
+                    }`}
+                  >
+                    {z.label}
+                  </h3>
+                  <p
+                    className={`mt-2 text-[11px] leading-6 md:text-[12px] ${
+                      isGarage
+                        ? "text-center text-amber-100/75 sm:text-start"
+                        : "text-center text-muted-foreground"
+                    }`}
+                  >
+                    {z.note}
+                  </p>
 
-                <div className="mt-auto flex flex-wrap justify-center gap-1.5 pt-4">
-                  <span className="rounded-full bg-black/30 px-2 py-1 text-[9px] text-muted-foreground">
-                    لا خطف
-                  </span>
-                  <span className="rounded-full bg-black/30 px-2 py-1 text-[9px] text-muted-foreground">
-                    لا سلاح
-                  </span>
-                  <span className="rounded-full bg-black/30 px-2 py-1 text-[9px] text-muted-foreground">
-                    لا سيناريو
-                  </span>
+                  <div
+                    className={`mt-4 flex flex-wrap gap-1.5 ${isGarage ? "justify-center sm:justify-start" : "justify-center"} ${isGarage ? "" : "mt-auto pt-4"}`}
+                  >
+                    {z.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`rounded-full border px-2 py-1 text-[9px] ${
+                          isGarage
+                            ? "border-amber-300/20 bg-amber-400/10 text-amber-100/85"
+                            : "border-white/8 bg-black/35 text-muted-foreground"
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </article>

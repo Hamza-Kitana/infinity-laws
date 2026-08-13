@@ -352,6 +352,54 @@
   }
 }
 
+@utility safe-tile-garage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid oklch(0.82 0.12 85 / 38%);
+  background:
+    repeating-linear-gradient(
+      -38deg,
+      oklch(0.82 0.12 85 / 8%) 0 10px,
+      transparent 10px 22px
+    ),
+    radial-gradient(85% 65% at 100% 0%, oklch(0.82 0.12 85 / 24%), transparent 58%),
+    linear-gradient(180deg, oklch(0.24 0.06 85 / 42%), oklch(0.13 0.04 300 / 84%));
+  box-shadow: 0 18px 50px -22px oklch(0.82 0.12 85 / 45%);
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+
+  &::before {
+    content: "P";
+    pointer-events: none;
+    position: absolute;
+    inset-inline-end: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: 5.5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: oklch(0.82 0.12 85 / 8%);
+    user-select: none;
+  }
+
+  &:hover {
+    border-color: oklch(0.86 0.14 85 / 72%);
+    box-shadow:
+      0 0 0 1px oklch(0.82 0.12 85 / 42%),
+      0 24px 56px -16px oklch(0.82 0.12 85 / 55%);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-8px) scale(1.01);
+    }
+  }
+}
+
 @utility ops-row {
   position: relative;
   transition: background 0.3s ease, transform 0.3s ease;
