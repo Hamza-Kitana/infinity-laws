@@ -1,4 +1,4 @@
-# Infinity Laws Portal
+# Infinite Laws Portal
 
 موقع دستور وقوانين سيرفر **إنفينيتي رول بلاي** على FiveM — صفحة واحدة بتجربة ترحيب ثلاثية الأبعاد.
 

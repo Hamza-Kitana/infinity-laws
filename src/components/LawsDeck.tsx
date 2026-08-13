@@ -434,7 +434,7 @@ export function LawsDeck() {
         />
         <div className="me-auto">
           <h1 className="font-display text-lg leading-tight font-black">
-            دستور مدينة <span className="neon-text tracking-wide">INFINITY</span>
+            دستور مدينة <span className="neon-text tracking-wide">INFINITE</span>
           </h1>
           <p className="text-[11px] tracking-widest text-muted-foreground">
             CFW · نظام اللعب · {total} مادة
@@ -523,7 +523,7 @@ export function LawsDeck() {
         )}
 
         <footer className="mt-10 pb-4 text-center text-[11px] tracking-widest text-muted-foreground">
-          © 2026 INFINITY · CFW · جميع الحقوق محفوظة
+          © 2026 INFINITE · CFW · جميع الحقوق محفوظة
         </footer>
       </section>
     </div>

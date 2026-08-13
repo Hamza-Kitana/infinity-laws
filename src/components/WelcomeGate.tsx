@@ -32,7 +32,7 @@ export function WelcomeGate({ onEnter }: { onEnter: () => void }) {
 
         <p className="mt-10 text-xs tracking-[0.65em] text-muted-foreground">CFW</p>
         <h1 className="neon-text font-display mt-3 text-6xl leading-none font-black tracking-[0.12em] md:text-8xl">
-          INFINITY
+          INFINITE
         </h1>
         <p className="mt-3 text-[11px] tracking-[0.45em] text-muted-foreground">نظام اللعب</p>
         <p className="mt-5 max-w-xl text-sm leading-8 text-muted-foreground md:text-base">

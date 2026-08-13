@@ -4,7 +4,7 @@ import { CityBackground } from "@/components/CityBackground";
 import { WelcomeGate } from "@/components/WelcomeGate";
 import { LawsDeck } from "@/components/LawsDeck";
 
-const title = "دستور مدينة إنفينيتي | قوانين سيرفر Infinity Roleplay";
+const title = "دستور مدينة إنفينيتي | قوانين سيرفر Infinite Roleplay";
 const description =
   "قوانين سيرفر إنفينيتي للرول بلاي في FiveM: القوانين العامة، الإجرام، التنظيمية، التفاوض، العقوبات، المناطق الآمنة، والمتجر."
 

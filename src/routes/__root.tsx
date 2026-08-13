@@ -75,7 +75,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "إنفينيتي رول بلاي" },
       { name: "description", content: "دستور وقوانين سيرفر إنفينيتي للرول بلاي في FiveM." },
-      { name: "author", content: "Infinity Roleplay" },
+      { name: "author", content: "Infinite Roleplay" },
       { property: "og:title", content: "إنفينيتي رول بلاي" },
       { property: "og:description", content: "دستور وقوانين سيرفر إنفينيتي للرول بلاي في FiveM." },
       { property: "og:type", content: "website" },
