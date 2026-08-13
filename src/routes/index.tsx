@@ -26,7 +26,7 @@ function Index() {
   const [entered, setEntered] = useState(false);
 
   return (
-    <main dir="rtl" className="relative h-screen overflow-hidden">
+    <main dir="rtl" className="relative h-dvh overflow-hidden">
       <CityBackground intensity={entered ? 0.55 : 1.15} />
       {entered ? <LawsDeck /> : <WelcomeGate onEnter={() => setEntered(true)} />}
     </main>

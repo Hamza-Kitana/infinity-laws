@@ -17,7 +17,8 @@ export function CityBackground({ intensity = 1 }: { intensity?: number }) {
     let raf = 0;
     let w = 0;
     let h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const isMobile = window.innerWidth < 768;
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
 
     const resize = () => {
       w = window.innerWidth;
@@ -32,7 +33,7 @@ export function CityBackground({ intensity = 1 }: { intensity?: number }) {
     window.addEventListener("resize", resize);
 
     const rand = (a: number, b: number) => a + Math.random() * (b - a);
-    const buildings: Building[] = Array.from({ length: 120 }, () => {
+    const buildings: Building[] = Array.from({ length: isMobile ? 52 : 120 }, () => {
       const side = Math.random() < 0.5 ? -1 : 1;
       return {
         x: side * rand(120, 900),
@@ -44,7 +45,7 @@ export function CityBackground({ intensity = 1 }: { intensity?: number }) {
       };
     });
 
-    const stars = Array.from({ length: 160 }, () => ({
+    const stars = Array.from({ length: isMobile ? 70 : 160 }, () => ({
       x: rand(-1600, 1600),
       y: rand(-900, -120),
       z: rand(300, 4200),

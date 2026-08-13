@@ -155,15 +155,28 @@
   }
 
   body {
+    height: 100%;
+    height: 100dvh;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html {
     overflow: hidden;
+    height: 100%;
+    height: 100dvh;
+  }
+
+  @media (max-width: 767px) {
+    input,
+    textarea,
+    select {
+      font-size: 16px;
+    }
   }
 }
 
@@ -239,12 +252,17 @@
   }
 
   &:hover {
-    transform: translateZ(36px) rotateX(5deg) rotateY(-5deg) scale(1.015);
     border-color: oklch(0.72 0.25 303 / 70%);
     box-shadow: var(--shadow-neon);
 
     &::after {
       transform: translateX(-120%);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateZ(36px) rotateX(5deg) rotateY(-5deg) scale(1.015);
     }
   }
 }
@@ -262,9 +280,14 @@
     box-shadow 0.4s ease;
 
   &:hover {
-    transform: translateY(-6px) scale(1.02);
     box-shadow: 0 0 0 1px color-mix(in oklch, var(--heat) 55%, transparent),
       0 22px 60px -18px color-mix(in oklch, var(--heat) 80%, transparent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
   }
 }
 
@@ -316,11 +339,16 @@
   }
 
   &:hover {
-    transform: translateY(-8px) scale(1.02);
     border-color: oklch(0.82 0.16 175 / 70%);
     box-shadow:
       0 0 0 1px oklch(0.78 0.14 175 / 40%),
       0 24px 56px -16px oklch(0.78 0.14 175 / 60%);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
   }
 }
 
@@ -337,6 +365,7 @@
 @utility scroll-neon {
   scrollbar-width: thin;
   scrollbar-color: oklch(0.66 0.24 303 / 60%) transparent;
+  -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -344,6 +373,15 @@
   &::-webkit-scrollbar-thumb {
     background: var(--gradient-neon);
     border-radius: 99px;
+  }
+}
+
+@utility scroll-tabs {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -419,8 +457,22 @@
   }
 }
 
+@keyframes inf-float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @utility anim-float {
   animation: inf-float 9s ease-in-out infinite;
+
+  @media (max-width: 767px) {
+    animation: inf-float-soft 6s ease-in-out infinite;
+  }
 }
 @utility anim-spin-slow {
   animation: inf-spin-slow 22s linear infinite;

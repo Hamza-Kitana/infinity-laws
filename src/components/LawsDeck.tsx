@@ -91,10 +91,10 @@ function RulesGrid({ section, query }: { section: RuleSection; query: string }) 
       {rules.map((rule, i) => (
         <article
           key={rule.id}
-          className="law-card anim-rise glass-panel rounded-2xl p-5 ps-6"
+          className="law-card anim-rise glass-panel rounded-2xl p-4 ps-5 md:p-5 md:ps-6"
           style={{ animationDelay: `${Math.min(i, 14) * 35}ms` }}
         >
-          <span className="pointer-events-none absolute -end-1 top-0 font-display text-[92px] leading-none font-black text-primary/7 select-none">
+          <span className="pointer-events-none absolute -end-1 top-0 font-display text-[64px] leading-none font-black text-primary/7 select-none md:text-[92px]">
             {pad(rule.id)}
           </span>
           <div className="relative flex items-start gap-3">
@@ -339,7 +339,7 @@ function SafeZonesPanel({ section, query }: { section: SafeZoneSection; query: s
 
   return (
     <div>
-      <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-safe/30 bg-safe/8 px-5 py-4">
+      <div className="mb-5 flex flex-col gap-3 rounded-2xl border border-safe/30 bg-safe/8 px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:px-5 sm:py-4">
         <span className="flex size-11 items-center justify-center rounded-2xl border border-safe/35 bg-safe/15 text-safe">
           <ShieldCheck className="size-5" />
         </span>
@@ -360,7 +360,7 @@ function SafeZonesPanel({ section, query }: { section: SafeZoneSection; query: s
           return (
             <article
               key={z.label}
-              className="safe-tile anim-rise min-h-[220px] rounded-[1.6rem] p-5"
+              className="safe-tile anim-rise min-h-[200px] rounded-[1.4rem] p-4 md:min-h-[220px] md:rounded-[1.6rem] md:p-5"
               style={{ animationDelay: `${i * 35}ms` }}
             >
               <div className="relative flex h-full flex-col">
@@ -425,29 +425,31 @@ export function LawsDeck() {
   );
 
   return (
-    <div className="scene-3d flex h-screen flex-col px-4 py-4 md:px-8 md:py-6">
-      <header className="glass-panel neon-ring flex flex-wrap items-center gap-4 rounded-2xl px-4 py-3">
-        <img
-          src={logo}
-          alt="شعار سيرفر إنفينيتي"
-          className="size-11 rounded-2xl object-cover"
-        />
-        <div className="me-auto">
-          <h1 className="font-display text-lg leading-tight font-black">
-            دستور مدينة <span className="neon-text tracking-wide">INFINITE</span>
-          </h1>
-          <p className="text-[11px] tracking-widest text-muted-foreground">
-            CFW · نظام اللعب · {total} مادة
-          </p>
+    <div className="scene-3d flex h-dvh flex-col px-3 pt-[max(0.75rem,env(safe-area-inset-top))] pb-[max(0.5rem,env(safe-area-inset-bottom))] md:px-8 md:py-6">
+      <header className="glass-panel neon-ring flex flex-col gap-3 rounded-2xl px-3 py-3 md:flex-row md:flex-wrap md:items-center md:gap-4 md:px-4">
+        <div className="flex min-w-0 items-center gap-3">
+          <img
+            src={logo}
+            alt="شعار سيرفر إنفينيتي"
+            className="size-10 shrink-0 rounded-2xl object-cover md:size-11"
+          />
+          <div className="min-w-0">
+            <h1 className="font-display text-base leading-tight font-black md:text-lg">
+              دستور مدينة <span className="neon-text tracking-wide">INFINITE</span>
+            </h1>
+            <p className="text-[10px] tracking-widest text-muted-foreground md:text-[11px]">
+              CFW · نظام اللعب · {total} مادة
+            </p>
+          </div>
         </div>
 
-        <label className="relative flex items-center">
+        <label className="relative flex w-full items-center md:ms-auto md:w-auto">
           <Search className="pointer-events-none absolute start-3 size-4 text-muted-foreground" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="ابحث داخل القسم المفتوح…"
-            className="h-11 w-56 rounded-full border border-border bg-secondary/40 ps-9 pe-9 text-sm outline-none transition focus:w-72 focus:border-primary/70 md:w-64"
+            placeholder="ابحث داخل القسم…"
+            className="h-11 w-full rounded-full border border-border bg-secondary/40 ps-9 pe-9 text-base outline-none transition focus:border-primary/70 md:w-64 md:text-sm md:focus:w-72"
           />
           {query && (
             <button
@@ -461,8 +463,8 @@ export function LawsDeck() {
         </label>
       </header>
 
-      <nav className="layer-3d mt-4 flex justify-center">
-        <div className="glass-panel flex flex-wrap items-center justify-center gap-1.5 rounded-3xl px-2 py-2 sm:gap-2 sm:px-3">
+      <nav className="scroll-tabs layer-3d -mx-3 mt-3 overflow-x-auto px-3 md:mx-0 md:mt-4 md:flex md:justify-center md:overflow-visible md:px-0">
+        <div className="glass-panel flex w-max min-w-full items-center justify-start gap-1.5 rounded-2xl px-2 py-2 md:w-auto md:flex-wrap md:justify-center md:rounded-3xl md:px-3">
           {sections.map((s) => {
             const isActive = s.id === activeId;
             const count =
@@ -478,13 +480,14 @@ export function LawsDeck() {
                   setActiveId(s.id);
                   setQuery("");
                 }}
-                className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
+                className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-bold transition-all duration-300 md:gap-2 md:px-5 md:py-2.5 md:text-sm ${
                   isActive
                     ? "neon-ring border-primary/70 bg-primary text-primary-foreground"
                     : "border-transparent text-muted-foreground hover:border-border hover:bg-secondary/40 hover:text-foreground"
                 }`}
               >
-                {s.label}
+                <span className="md:hidden">{s.short}</span>
+                <span className="hidden md:inline">{s.label}</span>
                 <span
                   className={`rounded-full px-2 py-0.5 text-[10px] ${
                     isActive ? "bg-primary-foreground/20" : "bg-secondary/60"
@@ -500,17 +503,19 @@ export function LawsDeck() {
 
       <section
         key={activeId}
-        className="scroll-neon layer-3d mt-4 min-h-0 flex-1 overflow-y-auto pe-2"
+        className="scroll-neon layer-3d mt-3 min-h-0 flex-1 overflow-y-auto pe-1 md:mt-4 md:pe-2"
       >
-        <div className="anim-rise mb-5 flex items-start gap-3">
+        <div className="anim-rise mb-4 flex items-start gap-3 md:mb-5">
           {active.kind === "safezones" ? (
-            <ShieldCheck className="mt-1 size-5 text-safe" />
+            <ShieldCheck className="mt-1 size-5 shrink-0 text-safe" />
           ) : (
-            <ScrollText className="mt-1 size-5 text-primary" />
+            <ScrollText className="mt-1 size-5 shrink-0 text-primary" />
           )}
-          <div>
-            <h2 className="font-display text-2xl font-black">{active.label}</h2>
-            <p className="mt-1 text-[13px] text-muted-foreground">{active.subtitle}</p>
+          <div className="min-w-0">
+            <h2 className="font-display text-xl font-black md:text-2xl">{active.label}</h2>
+            <p className="mt-1 text-[12px] leading-6 text-muted-foreground md:text-[13px]">
+              {active.subtitle}
+            </p>
           </div>
         </div>
 
